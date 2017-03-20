@@ -35,7 +35,7 @@ _ARGS.add_argument(
     )
 
 # Ensure we use fixed creation date.
-_CREATE_DATE = arrow.get("20167-03-21 00:00:00.000000+0000").datetime
+_CREATE_DATE = arrow.get("2017-03-21 00:00:00.000000+0000").datetime
 
 # CV authority = WCRP.
 _AUTHORITY = pyessv.create_authority(
@@ -125,8 +125,9 @@ def _create_collection_cmip6(source, collection_type, data_factory):
         pyessv.create_term(
             collection=collection,
             name=name,
-            data=data_factory(wcrp_cv_data, name) if data_factory else None,
-            create_date=_CREATE_DATE
+            description=name,
+            create_date=_CREATE_DATE,
+            data=data_factory(wcrp_cv_data, name) if data_factory else None
             )
 
 
@@ -151,8 +152,9 @@ def _create_collection_global(source, collection_type, data_factory):
         pyessv.create_term(
             collection=collection,
             name=name,
-            data=data_factory(wcrp_cv_data, name) if data_factory else None,
-            create_date=_CREATE_DATE
+            description=name,
+            create_date=_CREATE_DATE,
+            data=data_factory(wcrp_cv_data, name) if data_factory else None
             )
 
 
