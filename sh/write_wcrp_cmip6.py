@@ -27,39 +27,33 @@ _ARGS.add_argument(
     dest="source",
     type=str
     )
-_ARGS.add_argument(
-    "--dest",
-    help="Path to which pyessv formatted vocab files will be written.",
-    dest="dest",
-    type=str
-    )
 
 # Ensure we use fixed creation date.
 _CREATE_DATE = arrow.get("2017-03-21 00:00:00.000000+0000").datetime
 
 # CV authority = WCRP.
 _AUTHORITY = pyessv.create_authority(
-    name=u"WCRP",
-    description=u"World Climate Research Program",
-    url=u"https://www.wcrp-climate.org/wgcm-overview",
+    name="WCRP",
+    description="World Climate Research Program",
+    url="https://www.wcrp-climate.org/wgcm-overview",
     create_date=_CREATE_DATE
     )
 
 # CV scope = CMIP6.
 _SCOPE_CMIP6 = pyessv.create_scope(
     authority=_AUTHORITY,
-    name=u"CMIP6",
-    description=u"Controlled Vocabularies (CVs) for use in CMIP6",
-    url=u"https://github.com/WCRP-CMIP/CMIP6_CVs",
+    name="CMIP6",
+    description="Controlled Vocabularies (CVs) for use in CMIP6",
+    url="https://github.com/WCRP-CMIP/CMIP6_CVs",
     create_date=_CREATE_DATE
     )
 
 # CV scope = GLOBAL.
 _SCOPE_GLOBAL = pyessv.create_scope(
     authority=_AUTHORITY,
-    name=u"GLOBAL",
-    description=u"Global controlled Vocabularies (CVs)",
-    url=u"https://github.com/WCRP-CMIP/CMIP6_CVs",
+    name="GLOBAL",
+    description="Global controlled Vocabularies (CVs)",
+    url="https://github.com/WCRP-CMIP/CMIP6_CVs",
     create_date=_CREATE_DATE
     )
 
@@ -87,8 +81,6 @@ def _main(args):
     """Main entry point.
 
     """
-    if not os.path.isdir(args.dest):
-        raise ValueError("Archive directory does not exist")
     if not os.path.isdir(args.source):
         raise ValueError("WCRP vocab directory does not exist")
 
@@ -100,8 +92,11 @@ def _main(args):
     for typeof, data_factory in _COLLECTIONS_GLOBAL.items():
         _create_collection_global(args.source, typeof, data_factory)
 
-    # Write to file system.
-    pyessv.write_authority(args.dest, _AUTHORITY)
+    # Add to the archive.
+    pyessv.add(_AUTHORITY)
+
+    # Save (to file system).
+    pyessv.save()
 
 
 def _create_collection_cmip6(source, collection_type, data_factory):
@@ -112,11 +107,11 @@ def _create_collection_cmip6(source, collection_type, data_factory):
     wcrp_cv_data = _get_wcrp_cv(source, collection_type, "CMIP6_")
 
     # Create collection.
-    collection_name = unicode(collection_type.replace("_", "-"))
+    collection_name = collection_type.replace("_", "-")
     collection = pyessv.create_collection(
         scope=_SCOPE_CMIP6,
         name=collection_name,
-        description=u"WCRP CMIP6 CV collection: ".format(collection_name),
+        description="WCRP CMIP6 CV collection: ".format(collection_name),
         create_date=_CREATE_DATE
         )
 
@@ -139,11 +134,11 @@ def _create_collection_global(source, collection_type, data_factory):
     wcrp_cv_data = _get_wcrp_cv(source, collection_type)
 
     # Create collection.
-    collection_name = unicode(collection_type.replace("_", "-"))
+    collection_name = collection_type.replace("_", "-")
     collection = pyessv.create_collection(
         scope=_SCOPE_GLOBAL,
         name=collection_name,
-        description=u"WCRP GLOBAL CV collection: ".format(collection_name),
+        description="WCRP GLOBAL CV collection: ".format(collection_name),
         create_date=_CREATE_DATE
         )
 

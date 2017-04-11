@@ -9,12 +9,11 @@ main()
 	log "writing WCRP cmip6 cv ..."
 
 	declare source=$1
-	declare dest=$2
 
-	python $PYESSV_WRITER_HOME/sh/write_wcrp_cmip6.py --source=$source --dest=$dest
+	python $PYESSV_WRITER_HOME/sh/write_wcrp_cmip6.py --source=$source
 
-	log "WCRP cmip6 cv written to "$dest
+	log "WCRP cmip6 cv written to "$HOME/.esdoc/pyessv-archive
 }
 
 # Invoke entry point.
-main $1 $2
+main $1
